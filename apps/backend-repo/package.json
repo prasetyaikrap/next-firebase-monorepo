@@ -1,10 +1,10 @@
 {
-  "name": "frontend-repo",
-  "version": "0.1.0",
+  "name": "backend-repo",
+  "version": "1.0.0",
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack --port 3000",
+    "dev": "next dev --turbopack --port 3001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings 0",
@@ -12,9 +12,8 @@
   },
   "dependencies": {
     "@repo/shared": "*",
-    "next": "^15.1.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.0.2",
     "ts-pattern": "^5.6.1"
   },
   "devDependencies": {
