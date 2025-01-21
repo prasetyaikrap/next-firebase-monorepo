@@ -1,5 +1,14 @@
 import createApp from "./app";
 
+declare module "express-serve-static-core" {
+  interface Request {
+    credentials: {
+      userId: string;
+      clientId: string;
+    };
+  }
+}
+
 const startServer = async () => {
   const app = await createApp();
 

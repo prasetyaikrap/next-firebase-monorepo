@@ -13,11 +13,11 @@ export default class UpdateUserEntities {
   _verifyPayload(payload: UpdateUserPayload) {
     return match(payload)
       .with(
-        {
-          name: P.not(P.string.minLength(1)),
-          email: P.not(P.string.minLength(1)),
-          avatar: P.not(P.string),
-        },
+        P.not({
+          name: P.string.minLength(3),
+          email: P.string.minLength(10),
+          avatar: P.string,
+        }),
         () => {
           throw new InvariantError("Invalid request payload");
         }

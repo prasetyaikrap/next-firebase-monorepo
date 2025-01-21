@@ -1,5 +1,7 @@
+import { NextFunction, Request, Response } from "express";
 import AuthenticationsRepository from "../repository/authenticationsRepository";
-import { HTTPControllerProps } from "../types";
+import { CustomRequest } from "types";
+import autoBind from "auto-bind";
 
 type AuthMiddlewareProps = {
   authenticationsRepository: AuthenticationsRepository;
@@ -10,12 +12,13 @@ export default class AuthMiddleware {
 
   constructor({ authenticationsRepository }: AuthMiddlewareProps) {
     this._authenticationsRepository = authenticationsRepository;
+    autoBind(this);
   }
 
-  async execute({ request, next }: HTTPControllerProps) {
-    const authHeader = request.headers["authorization"] || "";
+  async execute(req: CustomRequest, _res: Response, next: NextFunction) {
+    const authHeader = req.headers["authorization"] || "";
     const idToken = authHeader.split(" ")[1] || "";
-    const clientIdHeader = (request.headers["x-client-id"] as string) || "";
+    const clientIdHeader = (req.headers["x-client-id"] as string) || "";
 
     const { clientId } = await this._authenticationsRepository.verifyClientId({
       clientId: clientIdHeader,
@@ -24,7 +27,7 @@ export default class AuthMiddleware {
       idToken,
     });
 
-    request.credentials = {
+    req.credentials = {
       clientId,
       userId,
     };

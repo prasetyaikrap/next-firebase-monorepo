@@ -10,7 +10,6 @@ export default async function firebaseInitialize() {
   if (getApps().length <= 0) {
     initializeApp({
       credential: cert(firebaseServiceAccount),
-      databaseURL: ENV.FIREBASE_DATABASE_URL,
     });
   }
 

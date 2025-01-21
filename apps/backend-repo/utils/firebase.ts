@@ -19,13 +19,30 @@ export function firebaseAuthError(error: FirebaseAuthError) {
   switch (error.code) {
     case "auth/email-already-exists":
     case "auth/uid-already-exists":
-      throw new InvariantError(`User is already exist`);
+      return {
+        code: 400,
+        message: `User is already exist`,
+        error,
+      };
     case "auth/id-token-expired":
     case "auth/id-token-revoked":
-      throw new AuthenticationError("ID Token has been expired / revoked");
+      return {
+        code: 401,
+        message: `ID Token has been expired / revoked`,
+        error,
+      };
     case "auth/invalid-id-token":
-      throw new AuthenticationError("ID Token Invalid");
+    case "auth/argument-error":
+      return {
+        code: 401,
+        message: `ID Token Invalid`,
+        error,
+      };
     default:
-      throw new InvariantError(error.message);
+      return {
+        code: 400,
+        message: error.message,
+        error,
+      };
   }
 }

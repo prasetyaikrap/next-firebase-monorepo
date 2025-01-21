@@ -13,12 +13,12 @@ export default class RegisterUserEntities {
   _verifyPayload(payload: RegisterUserPayload) {
     return match(payload)
       .with(
-        {
-          username: P.not(P.string.minLength(1)),
-          password: P.not(P.string.minLength(1)),
-          name: P.not(P.string.minLength(1)),
-          email: P.not(P.string.minLength(1)),
-        },
+        P.not({
+          username: P.string.minLength(5),
+          name: P.string.minLength(3),
+          email: P.string.minLength(10),
+          password: P.string.minLength(8),
+        }),
         () => {
           throw new InvariantError("Invalid request payload");
         }

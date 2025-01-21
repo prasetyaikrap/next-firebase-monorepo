@@ -1,4 +1,6 @@
-import express, { Response } from "express";
+import "express-async-errors";
+
+import express from "express";
 import firebaseInitialize from "../config/firebaseConfig";
 import UsersRepository from "../repository/usersRepository";
 import RegisterUserUseCase from "../usecases/users/RegisterUserUseCase";
@@ -8,6 +10,7 @@ import AuthenticationsRepository from "../repository/authenticationsRepository";
 import userRoutes from "../routes/usersRoute";
 import UsersController from "../controller/usersController";
 import AuthMiddleware from "../middleware/authMiddleware";
+import errorHandlerMiddleware from "middleware/errorHandlerMiddleware";
 
 export default async function createApp() {
   const { firestoreDB, firebaseAuth } = await firebaseInitialize();
@@ -44,10 +47,13 @@ export default async function createApp() {
   const app = express();
 
   app.use(express.json());
-  app.get("/", (res: Response) => {
+  app.get("/", (_req, res) => {
     res.json({ message: "Express Firebase Service - Prasetya EBuddy" });
   });
-  app.use("/api/users", userRouter);
+  app.use("/v1/users", userRouter);
+
+  // Error Handling
+  app.use(errorHandlerMiddleware);
 
   return app;
 }

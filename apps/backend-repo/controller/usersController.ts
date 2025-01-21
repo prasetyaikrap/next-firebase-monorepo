@@ -1,6 +1,7 @@
+import { NextFunction, Response } from "express";
 import RegisterUserEntities from "../entities/users/RegisterUserEntities";
 import UpdateUserEntities from "../entities/users/UpdateUserEntities";
-import { HTTPControllerProps } from "../types";
+import { CustomRequest } from "../types";
 import GetUserByIdUseCase, {
   GetUserByIdUseCasePayload,
 } from "../usecases/users/GetUserByIdUseCase";
@@ -10,6 +11,7 @@ import RegisterUserUseCase, {
 import UpdateUserByIdUseCase, {
   UpdateUserByIdUseCasePayload,
 } from "../usecases/users/UpdateUserByIdUseCase";
+import autoBind from "auto-bind";
 
 export type UsersControllerProps = {
   registerUserUseCase: RegisterUserUseCase;
@@ -30,9 +32,14 @@ export default class UsersController {
     this._registerUserUseCase = registerUserUseCase;
     this._getUserByIdUseCase = getUserByIdUseCase;
     this._updateUserByIdUseCase = updateUserByIdUseCase;
+    autoBind(this);
   }
 
-  async postRegisterUser({ request, response }: HTTPControllerProps) {
+  async postRegisterUser(
+    request: CustomRequest,
+    response: Response,
+    _next: NextFunction
+  ) {
     const payload: RegisterUserEntities["payload"] = await request.body;
 
     const useCasePayload: RegisterUserUseCasePayload = {
@@ -51,7 +58,11 @@ export default class UsersController {
     });
   }
 
-  async getUserById({ request, response }: HTTPControllerProps) {
+  async getUserById(
+    request: CustomRequest,
+    response: Response,
+    _next: NextFunction
+  ) {
     const useCasePayload: GetUserByIdUseCasePayload = {
       credentials: request.credentials,
       userId: request.params.id || "",
@@ -66,7 +77,11 @@ export default class UsersController {
     });
   }
 
-  async putUpdateUserById({ request, response }: HTTPControllerProps) {
+  async putUpdateUserById(
+    request: CustomRequest,
+    response: Response,
+    _next: NextFunction
+  ) {
     const payload: UpdateUserEntities["payload"] = await request.body;
     const useCasePayload: UpdateUserByIdUseCasePayload = {
       credentials: request.credentials,

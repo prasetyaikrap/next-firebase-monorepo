@@ -8,15 +8,9 @@ export type BaseUseCasePayload = {
   };
 };
 
-type CustomRequest = Request & {
+export interface CustomRequest extends Request {
   credentials: BaseUseCasePayload["credentials"];
-};
-
-export type HTTPControllerProps = {
-  request: CustomRequest;
-  response: Response;
-  next: NextFunction;
-};
+}
 
 export type RoutesProps<T> = {
   controller: T;

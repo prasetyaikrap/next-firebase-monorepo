@@ -53,7 +53,7 @@ export default class UsersRepository {
   constructor({ firestore, firebaseAuth }: UsersRepositoryProps) {
     this._firebaseAuth = firebaseAuth;
     this._firestore = firestore;
-    this._userCollectionRef = this._firestore.collection("admins");
+    this._userCollectionRef = this._firestore.collection("USERS");
   }
 
   async addUser(payload: AddUserProps) {
@@ -62,6 +62,7 @@ export default class UsersRepository {
       displayName: name,
       email,
       password,
+      emailVerified: true,
     });
     const userSearchName = name
       .toLowerCase()
@@ -103,11 +104,11 @@ export default class UsersRepository {
       throw new NotFoundError("User Not Found");
     }
 
-    const userData = snapshot.data() as UsersCollectionDoc;
+    const { user_search, ...userData } = snapshot.data() as UsersCollectionDoc;
 
     return {
-      ...userData,
       id: snapshot.id,
+      ...userData,
       created_at: convertTimestampToDateString(userData.created_at),
       updated_at: convertTimestampToDateString(userData.updated_at),
     };
