@@ -1,6 +1,5 @@
 export type UserData = {
   id: string;
-  username: string;
   name: string;
   email: string;
   avatar: string;
@@ -9,7 +8,6 @@ export type UserData = {
 };
 
 export type RegisterUserPayload = {
-  username: string;
   name: string;
   email: string;
   password: string;
