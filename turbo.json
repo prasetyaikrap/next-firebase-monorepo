@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["APP_ENV", "CLIENT_ID", "NEXT_PUBLIC_*"],
   "ui": "tui",
   "tasks": {
     "build": {
