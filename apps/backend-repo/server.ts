@@ -1,4 +1,4 @@
-import createApp from "./app";
+import createApp from "./core/app";
 
 declare module "express-serve-static-core" {
   interface Request {

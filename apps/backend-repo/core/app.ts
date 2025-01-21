@@ -10,7 +10,7 @@ import AuthenticationsRepository from "../repository/authenticationsRepository";
 import userRoutes from "../routes/usersRoute";
 import UsersController from "../controller/usersController";
 import AuthMiddleware from "../middleware/authMiddleware";
-import errorHandlerMiddleware from "middleware/errorHandlerMiddleware";
+import errorHandlerMiddleware from "../middleware/errorHandlerMiddleware";
 
 export default async function createApp() {
   const { firestoreDB, firebaseAuth } = await firebaseInitialize();

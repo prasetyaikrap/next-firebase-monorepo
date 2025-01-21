@@ -1,20 +1,22 @@
 {
-  "extends": "@repo/typescript-config/base.json",
+  // "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     "target": "ESNext",
-    "module": "CommonJS",
+    "module": "ESNext",
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    },
-    "moduleResolution": "Node",
-    "outDir": "./dist",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "outDir": "build",
     "importsNotUsedAsValues": "remove",
     "strict": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.js"],
   "exclude": ["node_modules"]
 }

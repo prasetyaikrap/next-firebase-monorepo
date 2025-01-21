@@ -1,4 +1,4 @@
-import { Auth, FirebaseAuthError, UserRecord } from "firebase-admin/auth";
+import { Auth } from "firebase-admin/auth";
 import {
   CollectionReference,
   FieldValue,
@@ -7,10 +7,7 @@ import {
 } from "firebase-admin/firestore";
 import NotFoundError from "../utils/exceptions/NotFoundError";
 import InvariantError from "../utils/exceptions/InvariantError";
-import {
-  convertTimestampToDateString,
-  firebaseAuthError,
-} from "../utils/firebase";
+import { convertTimestampToDateString } from "../utils/firebase";
 
 type UsersRepositoryProps = {
   firestore: Firestore;

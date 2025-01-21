@@ -1,7 +1,5 @@
 import { FirebaseAuthError } from "firebase-admin/auth";
 import { Timestamp } from "firebase-admin/firestore";
-import InvariantError from "./exceptions/InvariantError";
-import AuthenticationError from "./exceptions/AuthenticationError";
 
 export function convertTimestampToDate(value: Timestamp) {
   return value.toDate();

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import AuthenticationsRepository from "../repository/authenticationsRepository";
 import { CustomRequest } from "types";
 import autoBind from "auto-bind";

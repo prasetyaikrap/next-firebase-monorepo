@@ -2,12 +2,13 @@
   "name": "backend-repo",
   "version": "1.0.0",
   "type": "module",
+  "module": "server.mjs",
   "private": true,
   "scripts": {
-    "dev": "tsx watch --env-file=../../.env --clear-screen=false core/server.ts",
+    "dev": "tsx watch --env-file=../../.env --clear-screen=false server.ts",
     "emulator:ui": "firebase emulators:start",
-    "build": "next build",
-    "start": "next start",
+    "build": "npx tsc && npm start",
+    "start": "node --env-file=../../.env --experimental-loader=./loader.js build/server.js",
     "lint": "next lint --max-warnings 0",
     "check-types": "tsc --noEmit"
   },

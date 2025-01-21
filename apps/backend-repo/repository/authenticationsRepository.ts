@@ -1,17 +1,6 @@
-import { Auth, FirebaseAuthError, UserRecord } from "firebase-admin/auth";
-import {
-  CollectionReference,
-  FieldValue,
-  Filter,
-  Firestore,
-  Timestamp,
-} from "firebase-admin/firestore";
+import { Auth } from "firebase-admin/auth";
+import { Timestamp } from "firebase-admin/firestore";
 import AuthorizationError from "../utils/exceptions/AuthorizationError";
-import InvariantError from "../utils/exceptions/InvariantError";
-import {
-  convertTimestampToDateString,
-  firebaseAuthError,
-} from "../utils/firebase";
 import { ENV } from "../config/env";
 import AuthenticationError from "../utils/exceptions/AuthenticationError";
 
