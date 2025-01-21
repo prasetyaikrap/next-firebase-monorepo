@@ -15,7 +15,6 @@ type UsersRepositoryProps = {
 };
 
 export type UsersCollectionDoc = {
-  username: string;
   name: string;
   email: string;
   avatar: string;
@@ -25,7 +24,6 @@ export type UsersCollectionDoc = {
 };
 
 type AddUserProps = {
-  username: string;
   name: string;
   email: string;
   password: string;
@@ -54,7 +52,7 @@ export default class UsersRepository {
   }
 
   async addUser(payload: AddUserProps) {
-    const { username, email, name, password } = payload;
+    const { email, name, password } = payload;
     const userRecord = await this._firebaseAuth.createUser({
       displayName: name,
       email,
@@ -74,7 +72,6 @@ export default class UsersRepository {
 
     const userSearch = [...userSearchName, ...userSearchEmail];
     const snapshot = await this._userCollectionRef.doc(userRecord.uid).set({
-      username,
       name,
       email,
       avatar: "",

@@ -14,7 +14,6 @@ export default class RegisterUserEntities {
     return match(payload)
       .with(
         P.not({
-          username: P.string.minLength(5),
           name: P.string.minLength(3),
           email: P.string.minLength(10),
           password: P.string.minLength(8),
