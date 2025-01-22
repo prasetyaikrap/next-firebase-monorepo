@@ -1,4 +1,4 @@
-import { services } from "@/apis/client";
+import { services } from "@/apis/services";
 import firebaseInitialize from "@/configs/firebase";
 import { login, logout, setUser } from "@/store/slices/usersSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
@@ -33,7 +33,7 @@ export function useFirebaseAuth() {
     }
 
     sessionStorage.setItem("user_data", JSON.stringify(data));
-    dispatch(setUser({ user: data }));
+    return dispatch(setUser({ user: data }));
   };
 
   const getAuthState = async () => {
@@ -43,7 +43,7 @@ export function useFirebaseAuth() {
     return currentUser;
   };
 
-  const authStateHandler = async () => {
+  const authStateHandler = async (forceRefresh = false) => {
     const currentUser = await getAuthState();
 
     if (!currentUser) {
@@ -58,7 +58,7 @@ export function useFirebaseAuth() {
       await setCookies([{ name: "session_token", value: userIdToken }]);
     }
     dispatch(login({ idToken: userIdToken }));
-    await setUserData(currentUser.uid);
+    await setUserData(currentUser.uid, forceRefresh);
   };
 
   const registerUser = async (

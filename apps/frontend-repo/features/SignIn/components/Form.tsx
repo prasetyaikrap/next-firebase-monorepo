@@ -11,22 +11,30 @@ import {
 
 import { SignInFormSchema } from "../type";
 import { signInFormSchema } from "../constants";
-import { useForm } from "@/hooks/useForm";
 import { useFirebaseAuth } from "@/hooks/useFirebaseAuth";
 import { useSnackbar } from "@/hooks/useSnackbar";
 import { SnackbarAlert } from "@/components/SnackbarAlert";
 import { firebaseAuthError } from "@repo/shared/firebaseUtils";
 import { useEffect } from "react";
 import { nativeRouter } from "@/utils/client";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export function Form() {
   const router = nativeRouter();
   const { signInUser } = useFirebaseAuth();
-  const { setValues, fieldForm, formLoading, errors, handleSubmit } =
-    useForm<SignInFormSchema>({
-      defaultValues: { email: "", password: "", is_remember_me: false },
-      schema: signInFormSchema,
-    });
+  const {
+    register,
+    formState: { errors, isLoading, isSubmitting },
+    watch,
+    setValue,
+    handleSubmit,
+  } = useForm<SignInFormSchema>({
+    defaultValues: { email: "", password: "", is_remember_me: false },
+    resolver: zodResolver(signInFormSchema),
+  });
+  const { is_remember_me: watchRememberMe } = watch();
+  const formLoading = isLoading || isSubmitting;
   const useSnackbarProps = useSnackbar();
   const { state, onOpen, onClose } = useSnackbarProps;
 
@@ -64,60 +72,47 @@ export function Form() {
 
   useEffect(() => {
     const rememberEmail = localStorage.getItem("user_signin_email") ?? "";
-    setValues({ email: rememberEmail });
+    setValue("email", rememberEmail);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <Box
       component="form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit(onSubmit);
-      }}
+      onSubmit={handleSubmit(onSubmit)}
       sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 2 }}
     >
       <FormControl>
         <FormLabel htmlFor="email">Email</FormLabel>
         <TextField
-          error={Boolean(errors.email.message)}
-          helperText={errors.email.message}
-          id="email"
+          {...register("email")}
           type="email"
-          name="email"
           placeholder="your@email.com"
           autoComplete="email"
           autoFocus
           required
           fullWidth
           variant="outlined"
-          color={errors.email.message ? "error" : "primary"}
-          onChange={(e) => {
-            setValues({ email: e.currentTarget.value });
-          }}
-          value={fieldForm.email}
+          color={errors.email?.message ? "error" : "primary"}
+          error={Boolean(errors.email)}
+          helperText={errors.email?.message}
           disabled={formLoading}
         />
       </FormControl>
       <FormControl>
         <FormLabel htmlFor="password">Password</FormLabel>
         <TextField
-          error={Boolean(errors.password.message)}
-          helperText={errors.password.message}
-          name="password"
+          {...register("password")}
           placeholder="••••••"
           type="password"
-          id="password"
           autoComplete="current-password"
           autoFocus
           required
           fullWidth
           variant="outlined"
-          color={errors.password.message ? "error" : "primary"}
-          onChange={(e) => {
-            setValues({ password: e.currentTarget.value });
-          }}
-          value={fieldForm.password}
+          color={errors.password?.message ? "error" : "primary"}
+          error={Boolean(errors.password)}
+          helperText={errors.password?.message}
           disabled={formLoading}
         />
       </FormControl>
@@ -126,10 +121,8 @@ export function Form() {
           <Checkbox
             value="remember"
             color="primary"
-            checked={fieldForm.is_remember_me}
-            onChange={() =>
-              setValues({ is_remember_me: !fieldForm.is_remember_me })
-            }
+            checked={watchRememberMe}
+            onChange={() => setValue("is_remember_me", !watchRememberMe)}
           />
         }
         label="Remember me"
