@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { ZodObject, ZodRawShape, ZodTypeAny } from "zod";
+import { ZodEffects, ZodObject, ZodRawShape, ZodTypeAny } from "zod";
 
 export type UseFormProps<T extends Record<string, any> = Record<string, any>> =
   {
     defaultValues: T;
-    schema?: ZodObject<ZodRawShape, "strip", ZodTypeAny, T, T>;
+    schema?:
+      | ZodObject<ZodRawShape, "strip", ZodTypeAny, T, T>
+      | ZodEffects<ZodObject<ZodRawShape, "strip", ZodTypeAny, T, T>>;
   };
 
 export function useForm<T extends Record<string, any> = Record<string, any>>({
@@ -66,7 +68,9 @@ export function useForm<T extends Record<string, any> = Record<string, any>>({
     setFormLoading(true);
     if (schema) {
       const { success } = validate();
-      if (!success) return;
+      if (!success) {
+        return setFormLoading(false);
+      }
     }
 
     await onValid?.(fieldForm);

@@ -1,7 +1,9 @@
-"use client";
+import { services } from "@/apis/client";
 import firebaseInitialize from "@/configs/firebase";
-import { login, logout } from "@/store/slices/usersSlice";
+import { login, logout, setUser } from "@/store/slices/usersSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
+import { deleteCookie, getCookies, setCookies } from "@/utils/serverActions";
+import { UserData } from "@repo/shared/src/types/userType.js";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 
 export function useFirebaseAuth() {
@@ -9,50 +11,67 @@ export function useFirebaseAuth() {
   const userState = useAppSelector((state) => state.users);
   const dispatch = useAppDispatch();
 
+  const setUserData = async (userId: string, refresh = false) => {
+    if (refresh) {
+      sessionStorage.removeItem("user_data");
+    }
+
+    const userDataFromSessionStorage = sessionStorage.getItem("user_data");
+    if (userDataFromSessionStorage) {
+      const persistentUserData: UserData = JSON.parse(
+        userDataFromSessionStorage || "{}"
+      );
+      return dispatch(setUser({ user: persistentUserData }));
+    }
+
+    const { success, data } = await services.getUserById({
+      params: { id: userId },
+    });
+
+    if (!success || !data) {
+      return dispatch(setUser({ user: null }));
+    }
+
+    sessionStorage.setItem("user_data", JSON.stringify(data));
+    dispatch(setUser({ user: data }));
+  };
+
   const authStateHandler = async () => {
     await auth.authStateReady();
     const currentUser = auth.currentUser;
 
     if (!currentUser) {
+      sessionStorage.removeItem("user_data");
       return dispatch(logout());
     }
 
-    const userIdToken = await currentUser.getIdToken();
+    const userIdToken = await currentUser.getIdToken(true);
+    const [currentSessionToken] = await getCookies(["session_token"]);
 
-    dispatch(
-      login({
-        user: {
-          id: currentUser.uid,
-          name: currentUser.displayName ?? "",
-          email: currentUser.email ?? "",
-          avatar: "",
-          created_at: "",
-          updated_at: "",
-        },
-        idToken: userIdToken,
-      })
-    );
+    if (currentSessionToken?.value !== userIdToken) {
+      await setCookies([{ name: "session_token", value: userIdToken }]);
+    }
+    dispatch(login({ idToken: userIdToken }));
+    await setUserData(currentUser.uid);
+  };
+
+  const registerUser = async (
+    email: string,
+    password: string,
+    name: string
+  ) => {
+    const { success, error } = await services.registerUser({
+      data: { name, email, password },
+    });
+
+    if (!success) return { success: false, message: "Signup Failed", error };
+
+    return await signInUser(email, password);
   };
 
   const signInUser = async (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const userData = userCredential.user;
-        const idToken = await userData.getIdToken();
-        dispatch(
-          login({
-            user: {
-              id: userData.uid,
-              name: userData.displayName ?? "",
-              email: "",
-              avatar: "",
-              created_at: "",
-              updated_at: "",
-            },
-            idToken,
-          })
-        );
-
+      .then(() => {
         return { success: true, message: "Login Success", error: null };
       })
       .catch((err) => {
@@ -63,7 +82,8 @@ export function useFirebaseAuth() {
   const logoutUser = async () => {
     try {
       await signOut(auth);
-      dispatch(logout());
+      await deleteCookie("session_token");
+      authStateHandler();
       return { success: true, message: "Logout Success", error: null };
     } catch (err) {
       return {
@@ -78,6 +98,8 @@ export function useFirebaseAuth() {
     auth,
     userState,
     authStateHandler,
+    setUserData,
+    registerUser,
     signInUser,
     logoutUser,
   };
