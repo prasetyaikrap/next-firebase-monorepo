@@ -5,16 +5,17 @@
   "module": "server.mjs",
   "private": true,
   "scripts": {
-    "dev": "tsx watch --env-file=../../.env --clear-screen=false server.ts",
+    "dev": "tsx watch --env-file=.env --clear-screen=false server.ts",
     "emulator:ui": "firebase emulators:start",
     "build": "npx tsc && npm start",
-    "start": "node --env-file=../../.env --experimental-loader=./loader.js build/server.js",
+    "start": "node --env-file=.env --experimental-loader=./loader.js build/server.js",
     "lint": "next lint --max-warnings 0",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "@repo/shared": "*",
     "auto-bind": "^5.0.1",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "express-async-errors": "^3.1.1",
     "firebase-admin": "^13.0.2",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@types/cors": "^2.8.17",
     "@types/node": "^20",
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.0",

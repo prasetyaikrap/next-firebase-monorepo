@@ -1,6 +1,7 @@
 import "express-async-errors";
 
 import express from "express";
+import cors from "cors";
 import firebaseInitialize from "../config/firebaseConfig";
 import UsersRepository from "../repository/usersRepository";
 import RegisterUserUseCase from "../usecases/users/RegisterUserUseCase";
@@ -47,6 +48,7 @@ export default async function createApp() {
   const app = express();
 
   app.use(express.json());
+  app.use(cors());
   app.get("/", (_req, res) => {
     res.json({ message: "Express Firebase Service - Prasetya EBuddy" });
   });
