@@ -36,9 +36,15 @@ export function useFirebaseAuth() {
     dispatch(setUser({ user: data }));
   };
 
-  const authStateHandler = async () => {
+  const getAuthState = async () => {
     await auth.authStateReady();
     const currentUser = auth.currentUser;
+
+    return currentUser;
+  };
+
+  const authStateHandler = async () => {
+    const currentUser = await getAuthState();
 
     if (!currentUser) {
       sessionStorage.removeItem("user_data");
@@ -64,18 +70,34 @@ export function useFirebaseAuth() {
       data: { name, email, password },
     });
 
-    if (!success) return { success: false, message: "Signup Failed", error };
+    if (!success)
+      return { success: false, message: "Signup Failed", data: null, error };
 
     return await signInUser(email, password);
   };
 
   const signInUser = async (email: string, password: string) => {
     return signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        return { success: true, message: "Login Success", error: null };
+      .then((userCredential) => {
+        return {
+          success: true,
+          message: "Login Success",
+          data: {
+            user: {
+              displayName: userCredential.user.displayName,
+              email: userCredential.user.email,
+            },
+          },
+          error: null,
+        };
       })
       .catch((err) => {
-        return { success: false, message: "Login Failed", error: err };
+        return {
+          success: false,
+          message: "Login Failed",
+          data: null,
+          error: err,
+        };
       });
   };
 
@@ -97,6 +119,7 @@ export function useFirebaseAuth() {
   return {
     auth,
     userState,
+    getAuthState,
     authStateHandler,
     setUserData,
     registerUser,

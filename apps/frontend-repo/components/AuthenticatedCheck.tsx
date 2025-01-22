@@ -11,10 +11,10 @@ type AuthenticatedProps = {
   redirectTo?: string;
 };
 
-export function Authenticated({
+export function AuthenticatedCheck({
   children,
   loading = <LoadingScreen />,
-  redirectTo = "/signin",
+  redirectTo = "/",
 }: AuthenticatedProps) {
   const { userState, authStateHandler } = useFirebaseAuth();
   const { isAuthenticated, isLoading } = userState;
@@ -25,8 +25,8 @@ export function Authenticated({
   }, []);
 
   return match({ isAuthenticated, isLoading })
-    .with({ isAuthenticated: true, isLoading: false }, () => <>{children}</>)
-    .with({ isAuthenticated: false, isLoading: false }, () =>
+    .with({ isAuthenticated: false, isLoading: false }, () => <>{children}</>)
+    .with({ isAuthenticated: true, isLoading: false }, () =>
       redirect(redirectTo)
     )
     .otherwise(() => loading);

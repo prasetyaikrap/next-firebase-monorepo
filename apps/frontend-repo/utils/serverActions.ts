@@ -2,6 +2,7 @@
 
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function setCookies(cookieItems: ResponseCookie[]) {
   const cookieStore = await cookies();
@@ -27,4 +28,8 @@ export async function deleteCookies(keys: string[]) {
 
 export async function deleteCookie(key: string) {
   (await cookies()).delete(key);
+}
+
+export async function redirectTo(path: string) {
+  return redirect(path);
 }

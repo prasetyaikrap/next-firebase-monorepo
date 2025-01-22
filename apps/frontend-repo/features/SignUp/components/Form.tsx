@@ -1,11 +1,18 @@
 "use client";
 import { Box, Button, FormControl, FormLabel, TextField } from "@mui/material";
-import { useForm } from "../../../hooks/useForm";
+import { useForm } from "@/hooks/useForm";
 import { SignUpFormSchema } from "../type";
 import { signUpFormSchema } from "../constants";
 import { useEffect } from "react";
+import { useFirebaseAuth } from "@/hooks/useFirebaseAuth";
+import { SnackbarAlert } from "@/components/SnackbarAlert";
+import { useSnackbar } from "@/hooks/useSnackbar";
+import { firebaseAuthError } from "@repo/shared/firebaseUtils";
+import { nativeRouter } from "@/utils/client";
 
 export function Form() {
+  const router = nativeRouter();
+  const { registerUser } = useFirebaseAuth();
   const { setValues, fieldForm, errors, setErrors, handleSubmit, formLoading } =
     useForm<SignUpFormSchema>({
       defaultValues: {
@@ -17,8 +24,33 @@ export function Form() {
       schema: signUpFormSchema,
     });
 
+  const useSnackbarProps = useSnackbar();
+  const { state, onOpen, onClose } = useSnackbarProps;
+
+  const onAlertClose = () => {
+    onClose();
+    if (state.type === "success") {
+      router.replace("/");
+    }
+  };
   const onSubmit = async (data: SignUpFormSchema) => {
-    console.log(data);
+    const {
+      success,
+      data: resData,
+      error,
+    } = await registerUser(data.email, data.password, data.name);
+    if (!success) {
+      const { message } = firebaseAuthError(error);
+      return onOpen({
+        type: "error",
+        message,
+      });
+    }
+
+    onOpen({
+      type: "success",
+      message: `Sign Up Success, Welcome ${resData?.user.displayName}`,
+    });
   };
 
   useEffect(() => {
@@ -121,6 +153,10 @@ export function Form() {
       <Button type="submit" fullWidth variant="contained" loading={formLoading}>
         Sign up
       </Button>
+      <SnackbarAlert
+        useSnackbarProps={useSnackbarProps}
+        onClose={onAlertClose}
+      />
     </Box>
   );
 }

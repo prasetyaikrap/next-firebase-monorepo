@@ -30,7 +30,7 @@ export default function SignUpPage() {
             <span>
               <Link
                 component={NextLink}
-                href="/"
+                href="/signin"
                 variant="body2"
                 sx={{ alignSelf: "center" }}
               >
