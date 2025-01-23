@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { FirebaseAuthError } from "firebase-admin/auth";
 import ClientError from "../utils/exceptions/ClientError";
-import { firebaseAuthError } from "@repo/shared/src/utils/firebase.js";
+import { firebaseAuthError } from "../utils/firebase";
 
 export default function errorHandlerMiddleware(
   err: Error,
