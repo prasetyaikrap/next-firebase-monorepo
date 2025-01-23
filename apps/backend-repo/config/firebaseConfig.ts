@@ -4,7 +4,7 @@ import { getAuth } from "firebase-admin/auth";
 
 import { ENV } from "./env";
 
-export default async function firebaseInitialize() {
+export default function firebaseInitialize() {
   const firebaseServiceAccount = JSON.parse(ENV.FIREBASE_SERVICE_ACCOUNT);
 
   if (getApps().length <= 0) {

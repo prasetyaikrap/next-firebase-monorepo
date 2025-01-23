@@ -13,8 +13,12 @@ import UsersController from "../controller/usersController";
 import AuthMiddleware from "../middleware/authMiddleware";
 import errorHandlerMiddleware from "../middleware/errorHandlerMiddleware";
 
-export default async function createApp() {
-  const { firestoreDB, firebaseAuth } = await firebaseInitialize();
+type CreateAppProps = {
+  firebaseInstance: ReturnType<typeof firebaseInitialize>;
+};
+
+export default function createApp({ firebaseInstance }: CreateAppProps) {
+  const { firestoreDB, firebaseAuth } = firebaseInstance;
 
   // Repositories
   const authenticationsRepository = new AuthenticationsRepository({
