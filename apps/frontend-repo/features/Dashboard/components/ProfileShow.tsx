@@ -23,7 +23,7 @@ export function ProfileShow({ formProps }: ProfileShowProps) {
       maxWidth={{ xs: "450px", md: "800px" }}
       minHeight="300px"
     >
-      <Card sx={{ flex: 3, width: "full", p: "1em" }}>
+      <Card elevation={4} sx={{ flex: 3, width: "full", p: "1em" }}>
         <CardContent
           sx={{ display: "flex", flexDirection: "column", rowGap: "1rem" }}
         >
@@ -53,7 +53,7 @@ export function ProfileShow({ formProps }: ProfileShowProps) {
           </Stack>
         </CardContent>
       </Card>
-      <Card sx={{ flex: 2, width: "full" }}>
+      <Card elevation={4} sx={{ flex: 2, width: "full" }}>
         <CardMedia
           component="img"
           sx={{

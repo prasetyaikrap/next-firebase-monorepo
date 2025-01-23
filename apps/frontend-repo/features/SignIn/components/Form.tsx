@@ -20,7 +20,11 @@ import { nativeRouter } from "@/utils/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-export function Form() {
+type FormProps = {
+  toggleLoading: (state?: boolean) => void;
+};
+
+export function Form({ toggleLoading }: FormProps) {
   const router = nativeRouter();
   const { signInUser } = useFirebaseAuth();
   const {
@@ -34,7 +38,7 @@ export function Form() {
     resolver: zodResolver(signInFormSchema),
   });
   const { is_remember_me: watchRememberMe } = watch();
-  const formLoading = isLoading || isSubmitting;
+  const formLoading = isSubmitting || isLoading;
   const useSnackbarProps = useSnackbar();
   const { state, onOpen, onClose } = useSnackbarProps;
 
@@ -46,6 +50,7 @@ export function Form() {
   };
 
   const onSubmit = async (data: SignInFormSchema) => {
+    toggleLoading(true);
     const {
       success,
       error,
@@ -54,6 +59,7 @@ export function Form() {
 
     if (!success) {
       const { message } = firebaseAuthError(error);
+      toggleLoading(false);
       return onOpen({
         type: "error",
         message,

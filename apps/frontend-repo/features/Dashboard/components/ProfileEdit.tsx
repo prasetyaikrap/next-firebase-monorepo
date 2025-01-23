@@ -33,7 +33,7 @@ export function ProfileEdit({ formProps }: ProfileEditProps) {
       maxWidth={{ xs: "450px", md: "800px" }}
       minHeight="300px"
     >
-      <Card sx={{ flex: 3, width: "full", p: "1em" }}>
+      <Card elevation={4} sx={{ flex: 3, width: "full", p: "1em" }}>
         <CardContent
           sx={{ display: "flex", flexDirection: "column", rowGap: "1rem" }}
         >
@@ -72,7 +72,7 @@ export function ProfileEdit({ formProps }: ProfileEditProps) {
           </FormControl>
         </CardContent>
       </Card>
-      <Card sx={{ flex: 2, width: "full", p: "1em" }}>
+      <Card elevation={4} sx={{ flex: 2, width: "full", p: "1em" }}>
         <CardMedia
           component="img"
           sx={{

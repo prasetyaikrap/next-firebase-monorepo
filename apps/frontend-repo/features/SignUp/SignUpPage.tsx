@@ -1,8 +1,15 @@
+"use client";
 import { Box, Card, Container, Link, Typography } from "@mui/material";
 import NextLink from "next/link";
 import { Form } from "./components/Form";
+import { useState } from "react";
 
 export default function SignUpPage() {
+  const [cardLoading, setCardLoading] = useState(false);
+
+  const toggleCardLoading = (state?: boolean) =>
+    setCardLoading(state ?? !cardLoading);
+
   return (
     <Container
       sx={{
@@ -13,7 +20,7 @@ export default function SignUpPage() {
         minWidth: "100vw",
       }}
     >
-      <Card variant="outlined" sx={{ p: "2.2em" }}>
+      <Card elevation={5} sx={{ p: "2.2em" }}>
         <Box
           display="flex"
           flexDirection="column"
@@ -24,7 +31,7 @@ export default function SignUpPage() {
           <Typography component="h1" variant="h4">
             Create Account
           </Typography>
-          <Form />
+          <Form toggleLoading={toggleCardLoading} />
           <Typography sx={{ textAlign: "center" }}>
             Already have an account?{" "}
             <span>

@@ -11,7 +11,11 @@ import { nativeRouter } from "@/utils/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-export function Form() {
+type FormProps = {
+  toggleLoading: (state?: boolean) => void;
+};
+
+export function Form({ toggleLoading }: FormProps) {
   const router = nativeRouter();
   const { registerUser } = useFirebaseAuth();
   const {
@@ -44,6 +48,7 @@ export function Form() {
     }
   };
   const onSubmit = async (data: SignUpFormSchema) => {
+    toggleLoading(true);
     const {
       success,
       data: resData,
@@ -51,6 +56,7 @@ export function Form() {
     } = await registerUser(data.email, data.password, data.name);
     if (!success) {
       const { message } = firebaseAuthError(error);
+      toggleLoading(false);
       return onOpen({
         type: "error",
         message,
@@ -75,10 +81,7 @@ export function Form() {
   return (
     <Box
       component="form"
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit(onSubmit);
-      }}
+      onSubmit={handleSubmit(onSubmit)}
       sx={{ display: "flex", flexDirection: "column", width: "100%", gap: 2 }}
     >
       <FormControl>
