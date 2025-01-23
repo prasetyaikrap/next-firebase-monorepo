@@ -5,9 +5,10 @@
   "private": true,
   "main": "build/server.js",
   "scripts": {
-    "dev": "tsx watch --env-file=.env --clear-screen=false server.ts",
+    "dev": "tsx watch --env-file=.env --clear-screen=false server-node.ts",
     "build": "tsup",
     "start": "node --env-file=.env build/server.js",
+    "start:local": "firebase emulators:start --only functions,firestore,auth",
     "serve": "npm run build && firebase emulators:start --only functions",
     "lint": "next lint --max-warnings 0",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist && rm *.tsbuildinfo",

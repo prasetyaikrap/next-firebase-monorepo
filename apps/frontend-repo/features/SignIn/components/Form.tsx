@@ -14,7 +14,7 @@ import { signInFormSchema } from "../constants";
 import { useFirebaseAuth } from "@/hooks/useFirebaseAuth";
 import { useSnackbar } from "@/hooks/useSnackbar";
 import { SnackbarAlert } from "@/components/SnackbarAlert";
-import { firebaseAuthError } from "@repo/shared/firebaseUtils";
+import { firebaseAuthError } from "@/utils/firebase";
 import { useEffect } from "react";
 import { nativeRouter } from "@/utils/client";
 import { useForm } from "react-hook-form";

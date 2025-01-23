@@ -1,84 +1,50 @@
-# Turborepo starter
+# Nextjs (15) + Express Serverless Functions
 
-This Turborepo starter is maintained by the Turborepo core team.
+This Repository contains Fullstack application running a Frontend NextJs 15 and Express Serverless Functions with Firebase Cloud functions
 
-## Using this example
+## Author
 
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
+This Repository managed by [@prasetyaikrap](https://github.com/prasetyaikrap "@prasetyaikrap")
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `frontend-repo`: a [Next.js](https://nextjs.org/) app
+- `backend-repo`: a [Express JS](https://expressjs.com/) app deployed with [Firebase Cloud Functions](https://firebase.google.com/products/functions)
+- `@repo/shared`: Shared folder between backend and frontend
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-### Utilities
+### Setup
 
-This Turborepo has some additional tools already setup for you:
+Before running the apps, please set the environment variable for each repository with their respective environment variables required
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- frontend-repo: [env.example](./apps/frontend-repo/env.example)
+- backend-repo: [env.example](./apps/backend-repo/env.example)
 
 ### Build
 
-To build all apps and packages, run the following command:
+To build all apps and packages, run the following command (on root):
 
 ```
-cd my-turborepo
-pnpm build
+turbo run build
 ```
+
+### Running Locally
+
+After build the apps, you can run locally with firebase emulator with the command (on root):
+
+```
+turbo run start:local
+```
+
+Make sure you already setup [Firebase Emulator Suite](https://firebase.google.com/docs/emulator-suite/connect_and_prototype) before performing
 
 ### Develop
 
 To develop all apps and packages, run the following command:
 
 ```
-cd my-turborepo
-pnpm dev
+turbo run dev
 ```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useFirebaseAuth } from "@/hooks/useFirebaseAuth";
 import { SnackbarAlert } from "@/components/SnackbarAlert";
 import { useSnackbar } from "@/hooks/useSnackbar";
-import { firebaseAuthError } from "@repo/shared/firebaseUtils";
+import { firebaseAuthError } from "@/utils/firebase";
 import { nativeRouter } from "@/utils/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
